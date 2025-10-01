@@ -1,7 +1,13 @@
-# Use Python 3.10 base image
 FROM python:3.10-slim
 
-# Set working directory
+# Install system dependencies for building some Python packages
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libffi-dev \
+    libssl-dev \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 # Copy requirements and install
