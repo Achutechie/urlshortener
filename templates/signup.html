@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block title %}Login - LinkForge{% endblock %}
+{% block content %}
+<div class="container auth-container">
+    <h2>Welcome Back!</h2>
+    <p>Please enter your details to sign in.</p>
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+    <form action="/login" method="POST" class="auth-form">
+        <input type="email" name="email" placeholder="Email Address" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Sign In</button>
+    </form>
+    <p class="auth-switch">Don't have an account? <a href="/signup">Sign up now</a></p>
+</div>
+{% endblock %}

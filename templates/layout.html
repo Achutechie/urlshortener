@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LinkForge{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body>
+    <!-- Decorative elements for desktop -->
+    <div class="decoration-left"></div>
+    <div class="decoration-right"></div>
+
+    <header>
+        <div class="header-content">
+            <a href="{{ url_for('index') }}" class="brand-logo">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <h1>LinkForge</h1>
+            </a>
+            <nav>
+                {% if 'user' in session %}
+                    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                    <a href="{{ url_for('about') }}">About</a>
+                    <a href="{{ url_for('logout') }}" class="button-outline">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('about') }}">About</a>
+                    <a href="{{ url_for('login') }}">Login</a>
+                    <a href="{{ url_for('signup') }}" class="button-primary">Register Now</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 LinkForge. All Rights Reserved.</p>
+            <div class="theme-switcher">
+                <button id="theme-light" title="Light Mode"><i data-feather="sun"></i></button>
+                <button id="theme-dark" title="Dark Mode"><i data-feather="moon"></i></button>
+                <button id="theme-system" title="System Default"><i data-feather="monitor"></i></button>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Feather Icons
+        feather.replace();
+
+        // Theme Switcher Logic
+        const lightThemeBtn = document.getElementById('theme-light');
+        const darkThemeBtn = document.getElementById('theme-dark');
+        const systemThemeBtn = document.getElementById('theme-system');
+        const userTheme = localStorage.getItem('theme');
+        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        const applyTheme = (theme) => {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            lightThemeBtn.classList.remove('active');
+            darkThemeBtn.classList.remove('active');
+            systemThemeBtn.classList.remove('active');
+            if (theme === 'light') lightThemeBtn.classList.add('active');
+            else if (theme === 'dark') darkThemeBtn.classList.add('active');
+            else systemThemeBtn.classList.add('active');
+        };
+
+        const applySystemTheme = () => {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.removeItem('theme');
+            lightThemeBtn.classList.remove('active');
+            darkThemeBtn.classList.remove('active');
+            systemThemeBtn.classList.add('active');
+        };
+        
+        // Check for saved theme on load
+        if (userTheme === 'dark' || (!userTheme && systemTheme)) {
+            applyTheme('dark');
+        } else if (userTheme === 'light') {
+            applyTheme('light');
+        } else {
+            applySystemTheme();
+        }
+
+        // Add event listeners
+        lightThemeBtn.addEventListener('click', () => applyTheme('light'));
+        darkThemeBtn.addEventListener('click', () => applyTheme('dark'));
+        systemThemeBtn.addEventListener('click', applySystemTheme);
+    </script>
+</body>
+</html>

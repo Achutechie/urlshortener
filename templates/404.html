@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block title %}Page Not Found{% endblock %}
+{% block content %}
+<div class="container content-section">
+    <h2>404 - Link Not Found</h2>
+    <p>Sorry, the link you were looking for doesn't exist or may have been moved. Please check the URL and try again.</p>
+    <a href="{{ url_for('dashboard') }}" class="button-primary">Go to Dashboard</a>
+</div>
+{% endblock %}

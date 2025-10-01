@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block title %}Dashboard - LinkForge{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="dashboard-header">
+        <h2>Shorten Your Looooong Links :)</h2>
+        <p>Paste your long URL below to forge a new, shortened link with tracking and a QR code.</p>
+    </div>
+
+    <form class="shorten-form" method="POST" action="/shorten">
+        <input type="text" name="url" placeholder="https://example.com/your-very-long-link" required>
+        <button type="submit">Forge Link</button>
+    </form>
+
+    <div class="table-container">
+        <table class="links-table">
+            <thead>
+                <tr>
+                    <th>Short Link</th>
+                    <th>Original Link</th>
+                    <th>QR Code</th>
+                    <th>Clicks</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for link in user_links %}
+                <tr>
+                    <td data-label="Short Link"><a href="{{ link.short }}" target="_blank">{{ link.short.replace('http://', '').replace('https://', '') }}</a></td>
+                    <td data-label="Original Link" class="original-link-cell">
+                        <a href="{{ link.original }}" target="_blank" title="{{ link.original }}">{{ link.original }}</a>
+                    </td>
+                    <td data-label="QR Code">
+                        <img src="{{ url_for('generate_qr', short_code=link.short_code) }}" alt="QR Code" width="40" height="40">
+                    </td>
+                    <td data-label="Clicks">{{ link.clicks }}</td>
+                    <td data-label="Date">{{ link.date.split('T')[0] }}</td> {# Just show the date part #}
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="empty-state">You haven't forged any links yet. Create one above to get started!</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
