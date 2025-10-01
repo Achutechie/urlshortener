@@ -1,6 +1,6 @@
 Flask==2.3.2
-pyrebase==3.0.27
+pyrebase
 qrcode==7.4
 gunicorn==21.2.0
-requests==2.31.0
+requests
 urllib3==2.0.4
